@@ -11,7 +11,11 @@ NavMeshProjectSettings:
     cost: 1
   - name: Jump
     cost: 2
-  - name: 
+  - name: Red
+    cost: 1
+  - name: Yellow
+    cost: 1
+  - name: Blue
     cost: 1
   - name: 
     cost: 1
@@ -65,11 +69,7 @@ NavMeshProjectSettings:
     cost: 1
   - name: 
     cost: 1
-  - name: 
-    cost: 1
-  - name: 
-    cost: 1
-  m_LastAgentTypeID: -1372625422
+  m_LastAgentTypeID: -902729914
   m_Settings:
   - serializedVersion: 3
     agentTypeID: 0

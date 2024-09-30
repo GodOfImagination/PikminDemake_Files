@@ -5,26 +5,72 @@ using UnityEngine.AI;
 
 public class Character : MonoBehaviour
 {
-    private NavMeshAgent _agent;
+    private NavMeshAgent CharacterAgent;
+    private LineRenderer CharacterLine;
+
+    public bool CharacterSelected = false;
+    public bool CharacterMoving = false;
+    public bool CanClick = true;
 
     void Start()
     {
-        _agent = GetComponent<NavMeshAgent>();
+        CharacterAgent = GetComponent<NavMeshAgent>();
+
+        CharacterLine = gameObject.AddComponent<LineRenderer>();
+        CharacterLine.startWidth = 0.2f;
+        CharacterLine.endWidth = 0.2f;
+        CharacterLine.positionCount = 2;
+        CharacterLine.enabled = false;
     }
 
     void Update()
     {
-        Vector3 mouse = Input.mousePosition;
-        Ray castPoint = Camera.main.ScreenPointToRay(mouse);
-        RaycastHit hit;
+        Vector3 MousePosition = Input.mousePosition;
+        Ray CastPoint = Camera.main.ScreenPointToRay(MousePosition);
+        RaycastHit Hit = new RaycastHit();
 
-        if (Input.GetMouseButtonDown(0))
+        CharacterLine.SetPosition(0, transform.position);
+
+        if (!CharacterAgent.pathPending)
         {
-            if (Physics.Raycast(castPoint, out hit, Mathf.Infinity))
+            if (CharacterAgent.remainingDistance <= CharacterAgent.stoppingDistance)
             {
-                Debug.Log("Left Clicked: " + hit.point);
-                _agent.SetDestination(hit.point);
+                if (!CharacterAgent.hasPath || CharacterAgent.velocity.sqrMagnitude == 0f)
+                {
+                    CharacterMoving = false;
+                    CanClick = true;
+                }
             }
         }
+
+        if (Physics.Raycast(CastPoint, out Hit, Mathf.Infinity) && CharacterMoving == false)
+        {
+            CharacterLine.SetPosition(1, Hit.point);
+        }
+
+        if (Input.GetMouseButtonDown(0) && CharacterSelected && CanClick)
+        {
+            CharacterMoving = true;
+            CanClick = false;
+
+            if (Physics.Raycast(CastPoint, out Hit, Mathf.Infinity))
+            {
+                Debug.Log("Clicked: " + Hit.point);
+                CharacterAgent.SetDestination(Hit.point);
+                CharacterLine.SetPosition(1, Hit.point);
+            }
+        }
+    }
+
+    public void Selected()
+    {
+        CharacterSelected = true;
+        CharacterLine.enabled = true;
+    }
+
+    public void Unselected()
+    {
+        CharacterSelected = false;
+        CharacterLine.enabled = false;
     }
 }

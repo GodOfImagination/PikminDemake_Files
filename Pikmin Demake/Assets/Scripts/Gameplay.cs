@@ -18,7 +18,6 @@ public class Gameplay : MonoBehaviour
 
     [Header("Text\n")]
     public TextMeshProUGUI CharacterText;       // Tells the player if they have a specific character selected or not.
-    public TextMeshProUGUI GoalText;            // Tells the player if they have all characters at the goal.
 
     void Start()
     {
@@ -82,8 +81,6 @@ public class Gameplay : MonoBehaviour
         /// Keys:
         ///	WASD / Arrows	    - Movement
         ///	Q / E 			    - Up / Down (Local Space)
-        ///	R / F 			    - Up / Down (World Space)
-        ///	PageUp / PageDown	- Up / Down (World Space)
         ///	Hold Shift		    - Enable Fast Movement Mode
         ///	Right Mouse  	    - Enable Free Look
         ///	Mouse			    - Free Look / Rotation
@@ -113,22 +110,12 @@ public class Gameplay : MonoBehaviour
 
         if (Input.GetKey(KeyCode.Q))
         {
-            MainCamera.transform.position = MainCamera.transform.position + (MainCamera.transform.up * MovementSpeed * Time.deltaTime);
+            MainCamera.transform.position = MainCamera.transform.position + (-MainCamera.transform.up * MovementSpeed * Time.deltaTime);
         }
 
         if (Input.GetKey(KeyCode.E))
         {
-            MainCamera.transform.position = MainCamera.transform.position + (-MainCamera.transform.up * MovementSpeed * Time.deltaTime);
-        }
-
-        if (Input.GetKey(KeyCode.R) || Input.GetKey(KeyCode.PageUp))
-        {
-            MainCamera.transform.position = MainCamera.transform.position + (Vector3.up * MovementSpeed * Time.deltaTime);
-        }
-
-        if (Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.PageDown))
-        {
-            MainCamera.transform.position = MainCamera.transform.position + (-Vector3.up * MovementSpeed * Time.deltaTime);
+            MainCamera.transform.position = MainCamera.transform.position + (MainCamera.transform.up * MovementSpeed * Time.deltaTime);
         }
 
         if (IsLooking)

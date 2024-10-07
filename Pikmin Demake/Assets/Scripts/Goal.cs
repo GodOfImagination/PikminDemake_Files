@@ -30,7 +30,7 @@ public class Goal : MonoBehaviour
     {
         Character Character = other.gameObject.GetComponent<Character>();
 
-        if (Character.tag == "Red" || Character.tag == "Yellow" || Character.tag == "Blue")
+        if (Character.tag == "Character1" || Character.tag == "Character2" || Character.tag == "Character3")
         {
             CharacterList.Add(Character);
             GoalText.text = CharacterList.Count.ToString() + " of 3";
@@ -46,7 +46,7 @@ public class Goal : MonoBehaviour
     {
         Character Character = other.gameObject.GetComponent<Character>();
 
-        if (Character.tag == "Red" || Character.tag == "Yellow" || Character.tag == "Blue")
+        if (Character.tag == "Character1" || Character.tag == "Character2" || Character.tag == "Character3")
         {
             CharacterList.Remove(Character);
             GoalText.text = CharacterList.Count.ToString() + " of 3";

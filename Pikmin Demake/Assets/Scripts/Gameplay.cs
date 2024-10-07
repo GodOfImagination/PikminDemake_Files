@@ -42,20 +42,20 @@ public class Gameplay : MonoBehaviour
                     ClickedCharacter.Selected();
                     CharacterSelected = true;
 
-                    if (ClickedCharacter.tag == "Red")
+                    if (ClickedCharacter.name == "Character1")
                     {
                         CharacterText.text = "Red";
-                        CharacterText.color = new Color(255, 0, 0);
+                        CharacterText.color = new Color(0.7686275f, 0.1568628f, 0.1098039f);
                     }
-                    else if (ClickedCharacter.tag == "Yellow")
+                    else if (ClickedCharacter.name == "Character2")
                     {
-                        CharacterText.text = "Yellow";
-                        CharacterText.color = new Color(255, 255, 0);
+                        CharacterText.text = "Grey";
+                        CharacterText.color = new Color(0, 0, 0);
                     }
-                    else if (ClickedCharacter.tag == "Blue")
+                    else if (ClickedCharacter.name == "Character3")
                     {
                         CharacterText.text = "Blue";
-                        CharacterText.color = new Color(0, 0, 255);
+                        CharacterText.color = new Color(0.05098039f, 0.4117647f, 0.6745098f);
                     }
                 }
             }

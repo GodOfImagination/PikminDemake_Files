@@ -5,8 +5,15 @@ using UnityEngine.AI;
 
 public class Character : MonoBehaviour
 {
-    private NavMeshAgent CharacterAgent;       // The Character's Navigation.
-    private LineRenderer CharacterLine;        // The Character's Indicator.
+    private NavMeshAgent Agent;                // The Character's Navigation.
+    private LineRenderer Indicator;            // The Character's Indicator.
+
+    public GameObject FaceSelected;            // The Character's Selected Face.
+    public GameObject FaceUnselected;          // The Character's Unselected Face.
+
+    public AudioSource SelectSound;            // The Character's Select / Unselect Sound.
+    public AudioSource ClickSound;             // The Character's Click Sound.
+    private AudioSource MoveSound;             // The Character's Moving Sound.
 
     public bool CharacterSelected = false;     // Tells whether or not the character has been selected.
     public bool CharacterMoving = false;       // Tells whether or not the character is moving.
@@ -14,13 +21,17 @@ public class Character : MonoBehaviour
 
     void Start()
     {
-        CharacterAgent = GetComponent<NavMeshAgent>();
-        CharacterLine = GetComponent<LineRenderer>();
+        Agent = GetComponent<NavMeshAgent>();
+        Indicator = GetComponent<LineRenderer>();
+        MoveSound = GetComponent<AudioSource>();
 
-        CharacterLine.startWidth = 0.2f;
-        CharacterLine.endWidth = 0.2f;
-        CharacterLine.positionCount = 2;
-        CharacterLine.enabled = false;
+        Indicator.startWidth = 0.2f;
+        Indicator.endWidth = 0.2f;
+        Indicator.positionCount = 2;
+        Indicator.enabled = false;
+
+        FaceSelected.SetActive(false);
+        FaceUnselected.SetActive(true);
     }
 
     void Update()
@@ -29,14 +40,15 @@ public class Character : MonoBehaviour
         Ray CastPoint = Camera.main.ScreenPointToRay(MousePosition);
         RaycastHit HitInfo;
 
-        CharacterLine.SetPosition(0, transform.position);
+        Indicator.SetPosition(0, transform.position);
 
-        if (!CharacterAgent.pathPending)
+        if (!Agent.pathPending)
         {
-            if (CharacterAgent.remainingDistance <= CharacterAgent.stoppingDistance)
+            if (Agent.remainingDistance <= Agent.stoppingDistance)
             {
-                if (!CharacterAgent.hasPath || CharacterAgent.velocity.sqrMagnitude == 0f)
+                if (!Agent.hasPath || Agent.velocity.sqrMagnitude == 0f)
                 {
+                    MoveSound.Pause();
                     CharacterMoving = false;
                     CanClick = true;
                 }
@@ -45,19 +57,21 @@ public class Character : MonoBehaviour
 
         if (Physics.Raycast(CastPoint, out HitInfo, Mathf.Infinity) && CharacterMoving == false)
         {
-            CharacterLine.SetPosition(1, HitInfo.point);
+            Indicator.SetPosition(1, HitInfo.point);
         }
 
         if (Input.GetMouseButtonDown(0) && CharacterSelected && CanClick)
         {
+            ClickSound.Play();
+            MoveSound.Play();
             CharacterMoving = true;
             CanClick = false;
 
             if (Physics.Raycast(CastPoint, out HitInfo, Mathf.Infinity))
             {
                 Debug.Log("Clicked: " + HitInfo.point);
-                CharacterAgent.SetDestination(HitInfo.point);
-                CharacterLine.SetPosition(1, HitInfo.point);
+                Agent.SetDestination(HitInfo.point);
+                Indicator.SetPosition(1, HitInfo.point);
             }
         }
     }
@@ -65,12 +79,20 @@ public class Character : MonoBehaviour
     public void Selected()
     {
         CharacterSelected = true;
-        CharacterLine.enabled = true;
+        Indicator.enabled = true;
+        SelectSound.Play();
+
+        FaceSelected.SetActive(true);
+        FaceUnselected.SetActive(false);
     }
 
     public void Unselected()
     {
         CharacterSelected = false;
-        CharacterLine.enabled = false;
+        Indicator.enabled = false;
+        SelectSound.Play();
+
+        FaceSelected.SetActive(false);
+        FaceUnselected.SetActive(true);
     }
 }

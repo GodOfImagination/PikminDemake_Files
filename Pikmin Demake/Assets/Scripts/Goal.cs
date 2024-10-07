@@ -11,7 +11,7 @@ public class Goal : MonoBehaviour
     public int CharacterGoal = 3;             // How many characters are required in order to win.
     public int TicketGoal = 3;                // How many tickets are required in order to win.
     public List<Character> CharacterList;     // Keeps track of whether or not a character(s) has reached the goal.
-    public List<GameObject> TicketList;           // Keeps track of whether or not a ticket(s) has reached the goal.
+    public List<int> TicketList;              // Keeps track of whether or not a ticket(s) has reached the goal.
 
     [Header("Text\n")]
     public TextMeshProUGUI CharacterText;     // Tells the player how many characters are at the goal and how many are required.
@@ -19,7 +19,8 @@ public class Goal : MonoBehaviour
 
     [Space(10)]
     public GameObject CharacterBox;           // Tells the player if they have a specific character selected or not.
-    public GameObject GoalBox;                // Tells the player how many characters are at the goal and how many are required.
+    public GameObject GoalBox1;               // Tells the player how many characters are at the goal and how many are required.
+    public GameObject GoalBox2;               // Tells the player how many tickets are at the goal and how many are required.
     public GameObject WinBox;                 // Tells the player if they have all the characters at the goal.
 
     void Start()
@@ -39,9 +40,9 @@ public class Goal : MonoBehaviour
             CharacterText.text = CharacterList.Count.ToString() + " of 3";
         }
 
-        if (other.gameObject.name == "Ticket1" || other.gameObject.name == "Ticket2" || other.gameObject.name == "Ticket3" || other.gameObject.name == "FakeTicket")
+        if (other.gameObject.name == "FakeTicket" || other.gameObject.name == "Ticket" || other.gameObject.CompareTag("Ticket"))
         {
-            TicketList.Add(other.gameObject);
+            //TicketList.Add(other.gameObject);
             TicketText.text = TicketList.Count.ToString() + " of 3";
         }
 
@@ -61,9 +62,9 @@ public class Goal : MonoBehaviour
             CharacterText.text = CharacterList.Count.ToString() + " of 3";
         }
 
-        if (other.gameObject.name == "Ticket1" || other.gameObject.name == "Ticket2" || other.gameObject.name == "Ticket3" || other.gameObject.name == "FakeTicket")
+        if (other.gameObject.name == "FakeTicket" || other.gameObject.name == "Ticket" || other.gameObject.CompareTag("Ticket"))
         {
-            TicketList.Remove(other.gameObject);
+            //TicketList.Remove(other.gameObject);
             TicketText.text = TicketList.Count.ToString() + " of 3";
         }
     }
@@ -75,7 +76,14 @@ public class Goal : MonoBehaviour
         VictorySound.Play();
 
         CharacterBox.SetActive(false);
-        GoalBox.SetActive(false);
+        GoalBox1.SetActive(false);
+        GoalBox2.SetActive(false);
         WinBox.SetActive(true);
+    }
+
+    public void TicketCollected()
+    {
+        TicketList.Add(1);
+        TicketText.text = TicketList.Count.ToString() + " of 3";
     }
 }

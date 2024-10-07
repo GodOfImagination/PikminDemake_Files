@@ -9,6 +9,12 @@ public class Ticket : MonoBehaviour
     public bool CanRotate = true;              // Tells whether or not the object can rotate.
 
     private Character CharacterWithTicket;     // Keeps track of which character currently has picked up a ticket.
+    private Goal GoalScript;
+
+    void Start()
+    {
+        GoalScript = GameObject.FindObjectOfType<Goal>();
+    }
 
     void Update()
     {
@@ -27,6 +33,8 @@ public class Ticket : MonoBehaviour
             Character.CollectTicket();
 
             Character = CharacterWithTicket;
+
+            GoalScript.TicketCollected();
         }
     }
 

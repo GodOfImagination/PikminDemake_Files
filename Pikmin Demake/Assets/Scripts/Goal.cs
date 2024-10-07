@@ -9,10 +9,13 @@ public class Goal : MonoBehaviour
 
     [Header("Tally\n")]
     public int CharacterGoal = 3;             // How many characters are required in order to win.
+    public int TicketGoal = 3;                // How many tickets are required in order to win.
     public List<Character> CharacterList;     // Keeps track of whether or not a character(s) has reached the goal.
+    public List<GameObject> TicketList;           // Keeps track of whether or not a ticket(s) has reached the goal.
 
     [Header("Text\n")]
-    public TextMeshProUGUI GoalText;          // Tells the player how many characters are at the goal and how many are required.
+    public TextMeshProUGUI CharacterText;     // Tells the player how many characters are at the goal and how many are required.
+    public TextMeshProUGUI TicketText;        // Tells the player how many tickets are at the goal and how many are required.
 
     [Space(10)]
     public GameObject CharacterBox;           // Tells the player if they have a specific character selected or not.
@@ -30,15 +33,21 @@ public class Goal : MonoBehaviour
     {
         Character Character = other.gameObject.GetComponent<Character>();
 
-        if (Character.tag == "Character1" || Character.tag == "Character2" || Character.tag == "Character3")
+        if (Character.name == "Character1" || Character.name == "Character2" || Character.name == "Character3")
         {
             CharacterList.Add(Character);
-            GoalText.text = CharacterList.Count.ToString() + " of 3";
+            CharacterText.text = CharacterList.Count.ToString() + " of 3";
+        }
 
-            if (CharacterList.Count >= CharacterGoal)
-            {
-                StartCoroutine(Winner());
-            }
+        if (other.gameObject.name == "Ticket1" || other.gameObject.name == "Ticket2" || other.gameObject.name == "Ticket3" || other.gameObject.name == "FakeTicket")
+        {
+            TicketList.Add(other.gameObject);
+            TicketText.text = TicketList.Count.ToString() + " of 3";
+        }
+
+        if (CharacterList.Count >= CharacterGoal && TicketList.Count >= TicketGoal)
+        {
+            StartCoroutine(Winner());
         }
     }
 
@@ -46,10 +55,16 @@ public class Goal : MonoBehaviour
     {
         Character Character = other.gameObject.GetComponent<Character>();
 
-        if (Character.tag == "Character1" || Character.tag == "Character2" || Character.tag == "Character3")
+        if (Character.name == "Character1" || Character.name == "Character2" || Character.name == "Character3")
         {
             CharacterList.Remove(Character);
-            GoalText.text = CharacterList.Count.ToString() + " of 3";
+            CharacterText.text = CharacterList.Count.ToString() + " of 3";
+        }
+
+        if (other.gameObject.name == "Ticket1" || other.gameObject.name == "Ticket2" || other.gameObject.name == "Ticket3" || other.gameObject.name == "FakeTicket")
+        {
+            TicketList.Remove(other.gameObject);
+            TicketText.text = TicketList.Count.ToString() + " of 3";
         }
     }
 

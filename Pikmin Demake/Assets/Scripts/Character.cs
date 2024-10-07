@@ -10,14 +10,18 @@ public class Character : MonoBehaviour
 
     public GameObject FaceSelected;            // The Character's Selected Face.
     public GameObject FaceUnselected;          // The Character's Unselected Face.
+    public GameObject FakeTicket;              // The Character's Fake Ticket.
 
     public AudioSource SelectSound;            // The Character's Select / Unselect Sound.
     public AudioSource ClickSound;             // The Character's Click Sound.
     private AudioSource MoveSound;             // The Character's Moving Sound.
 
+    private Ticket TicketScript;
+
     public bool CharacterSelected = false;     // Tells whether or not the character has been selected.
     public bool CharacterMoving = false;       // Tells whether or not the character is moving.
     public bool CanClick = true;               // Tells whether or not the player is allowed to click.
+    public bool HasTicket = false;             // Tells whether or not the character has a ticket.
 
     void Start()
     {
@@ -32,6 +36,9 @@ public class Character : MonoBehaviour
 
         FaceSelected.SetActive(false);
         FaceUnselected.SetActive(true);
+        FakeTicket.SetActive(false);
+
+        TicketScript = GameObject.FindObjectOfType<Ticket>();
     }
 
     void Update()
@@ -94,5 +101,21 @@ public class Character : MonoBehaviour
 
         FaceSelected.SetActive(false);
         FaceUnselected.SetActive(true);
+    }
+
+    public void CollectTicket()
+    {
+        FakeTicket.SetActive(true);
+
+        HasTicket = true;
+    }
+
+    public void DropTicket()
+    {
+        FakeTicket.SetActive(false);
+
+        HasTicket = false;
+
+        TicketScript.TicketDropped();
     }
 }
